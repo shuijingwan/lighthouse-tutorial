@@ -14,10 +14,11 @@ type Query {
 }
 
 type Mutation {
-    createPost(author_id: Int!, title: String!, content: String!): Post! @create
+    createPost(input: CreatePostInput! @spread): Post @create
     updateUser(id: ID!, name: String): User @update
     upsertUser(id: ID!, name: String!, email: String): User @upsert
     deleteUser(id: ID!): User @delete
+    updatePost(input: UpdatePostInput! @spread): Post @update
 }
 
 type User {
@@ -27,7 +28,6 @@ type User {
     created_at: DateTime!
     updated_at: DateTime!
     posts: [Post!]! @hasMany
-    image: Image @morphOne
 }
 
 type Post {
@@ -36,8 +36,6 @@ type Post {
     content: String!
     author: User! @belongsTo(relation: "user")
     comments: [Comment!]! @hasMany
-    image: Image! @morphOne
-    images: [Image]! @morphMany
 }
 
 type Comment {
@@ -46,10 +44,39 @@ type Comment {
     post: Post! @belongsTo
 }
 
-type Image {
-    id: ID!
-    url: String!
-    imageable: Imageable! @morphTo
+input CreatePostInput {
+    title: String!
+    content: String!
+    author: CreateUserBelongsTo
 }
 
-union Imageable = Post | User
+input UpdatePostInput {
+    id: ID!
+    title: String
+    author: UpdateUserBelongsTo
+}
+
+input CreateUserBelongsTo {
+    connect: ID
+    create: CreateUserInput
+}
+
+input CreateUserInput {
+    name: String!
+    email: String!
+    password: String!
+}
+
+input UpdateUserInput {
+    name: String!
+    email: String
+}
+
+input UpdateUserBelongsTo {
+    connect: ID
+    create: CreateUserInput
+    update: UpdateUserInput
+    upsert: UpdateUserInput
+    disconnect: Boolean
+    delete: Boolean
+}
