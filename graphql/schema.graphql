@@ -11,6 +11,7 @@ type Query {
     user(id: ID @eq): User @find
     posts: [Post!]! @all
     post(id: Int! @eq): Post @find
+    images: [Image!]! @all
 }
 
 type Mutation {
@@ -28,6 +29,7 @@ type User {
     created_at: DateTime!
     updated_at: DateTime!
     posts: [Post!]! @hasMany
+    image: Image @morphOne
 }
 
 type Post {
@@ -36,12 +38,19 @@ type Post {
     content: String!
     author: User! @belongsTo(relation: "user")
     comments: [Comment!]! @hasMany
+    image: Image! @morphOne
 }
 
 type Comment {
     id: ID!
     reply: String!
     post: Post! @belongsTo
+}
+
+type Image {
+    id: ID!
+    url: String!
+    imageable: Imageable! @morphTo
 }
 
 input CreatePostInput {
@@ -80,3 +89,5 @@ input UpdateUserBelongsTo {
     disconnect: Boolean
     delete: Boolean
 }
+
+union Imageable = Post | User
