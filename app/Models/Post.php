@@ -21,16 +21,19 @@ class Post extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    public function comments(): HasMany
-    {
-        return $this->hasMany(Comment::class);
-    }
-
     /**
      * 获取文章图片
      */
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
+    }
+
+    /**
+     * 获取此文章的所有评论
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

@@ -37,14 +37,21 @@ type Post {
     title: String!
     content: String!
     author: User! @belongsTo(relation: "user")
-    comments: [Comment!]! @hasMany
+    comments: [Comment!]! @morphMany
     image: Image! @morphOne
+}
+
+type Video {
+    id: ID!
+    title: String!
+    url: String!
+    comments: [Comment!]! @morphMany
 }
 
 type Comment {
     id: ID!
     reply: String!
-    post: Post! @belongsTo
+    commentable: Commentable! @morphTo
 }
 
 type Image {
@@ -91,3 +98,4 @@ input UpdateUserBelongsTo {
 }
 
 union Imageable = Post | User
+union Commentable = Post | Video

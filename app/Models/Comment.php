@@ -14,4 +14,12 @@ class Comment extends Model
     {
         return $this->belongsTo(Post::class);
     }
+
+    /**
+     * 获取拥有此评论的模型
+     */
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
 }
