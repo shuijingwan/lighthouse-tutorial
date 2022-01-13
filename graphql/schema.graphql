@@ -27,6 +27,7 @@ type User {
     created_at: DateTime!
     updated_at: DateTime!
     posts: [Post!]! @hasMany
+    image: Image @morphOne
 }
 
 type Post {
@@ -35,6 +36,8 @@ type Post {
     content: String!
     author: User! @belongsTo(relation: "user")
     comments: [Comment!]! @hasMany
+    image: Image! @morphOne
+    images: [Image]! @morphMany
 }
 
 type Comment {
@@ -42,3 +45,11 @@ type Comment {
     reply: String!
     post: Post! @belongsTo
 }
+
+type Image {
+    id: ID!
+    url: String!
+    imageable: Imageable! @morphTo
+}
+
+union Imageable = Post | User
