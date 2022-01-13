@@ -15,6 +15,7 @@ type Query {
 
 type Mutation {
     createPost(author_id: Int!, title: String!, content: String!): Post! @create
+    updateUser(id: ID!, name: String): User @update
 }
 
 type User {
