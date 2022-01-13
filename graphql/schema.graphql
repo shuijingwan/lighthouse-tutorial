@@ -13,6 +13,10 @@ type Query {
     post(id: Int! @eq): Post @find
 }
 
+type Mutation {
+    createPost(author_id: Int!, title: String!, content: String!): Post! @create
+}
+
 type User {
     id: ID!
     name: String!
